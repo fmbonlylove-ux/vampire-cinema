@@ -395,26 +395,19 @@
       frame.style.display = 'block';
       placeholder.classList.remove('visible');
 
-      // Серверы, подобранные специально под работу с включенным VPN
-      const servers = [
-        { name: '✦ Сервер 1 (VPN-Friendly)', url: `https://api.strall.club/embed/kp/${kpId}` },
-        { name: '✦ Сервер 2 (Global)', url: `https://api.alloha.tv/?kp=${kpId}` },
-        { name: '✦ Сервер 3 (РФ-Зеркало)', url: `https://voidboost.cc/embed/${kpId}` }
-      ];
-
-      frame.innerHTML = '';
-      
-      // Создаем панель переключения серверов
-      const btnContainer = document.createElement('div');
-      btnContainer.style.cssText = 'display:flex;gap:10px;padding:12px;background:#0d0d0d;border-bottom:1px solid rgba(255,255,255,0.05);overflow-x:auto;';
-      
-      // Создаем сам плеер
+      // Используем плеер, который идеально переваривает VPN и содержит вкладки внутри видео
       const iframe = document.createElement('iframe');
+      iframe.src             = `https://kinobox.tv/embed/vod?kp=${kpId}`;
       iframe.allowFullscreen = true;
       iframe.scrolling       = 'no';
-      iframe.style.cssText   = 'width:100%;height:calc(100% - 55px);border:none;display:block;';
-      
-      // Генерируем кнопки для серверов
+      iframe.style.cssText   = 'width:100%;height:100%;border:none;display:block;background:#000;';
+
+      frame.innerHTML = '';
+      frame.appendChild(iframe);
+
+      titleEl.textContent    = `Фильм #${kpId}`;
+      subtitleEl.textContent = 'Стабильный источник • Работает под VPN';
+    }
       servers.forEach((server, index) => {
         const btn = document.createElement('button');
         btn.textContent = server.name;
