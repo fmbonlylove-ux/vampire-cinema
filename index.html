@@ -378,6 +378,10 @@
   </main>
 
   <script>
+    function getKpId() {
+      return new URLSearchParams(window.location.search).get('kp');
+    }
+
     function loadPlayer(kpId) {
       const frame       = document.getElementById('player-frame');
       const placeholder = document.getElementById('placeholder');
@@ -387,7 +391,7 @@
       if (!kpId) {
         frame.style.display = 'none';
         placeholder.classList.add('visible');
-        titleEl.textContent    = 'Vampire Cinema';
+        titleEl.textContent    = 'LLS Vampire Lab';
         subtitleEl.textContent = '';
         return;
       }
@@ -395,51 +399,19 @@
       frame.style.display = 'block';
       placeholder.classList.remove('visible');
 
-      // Используем плеер, который идеально переваривает VPN и содержит вкладки внутри видео
       const iframe = document.createElement('iframe');
-      iframe.src             = `https://kinobox.tv/embed/vod?kp=${kpId}`;
+      iframe.src            = `https://api.strall.club/embed/kp/${kpId}`;
       iframe.allowFullscreen = true;
       iframe.scrolling       = 'no';
-      iframe.style.cssText   = 'width:100%;height:100%;border:none;display:block;background:#000;';
+      iframe.style.cssText   = 'width:100%;height:100%;border:none;display:block;';
 
       frame.innerHTML = '';
       frame.appendChild(iframe);
 
       titleEl.textContent    = `Фильм #${kpId}`;
-      subtitleEl.textContent = 'Стабильный источник • Работает под VPN';
+      subtitleEl.textContent = 'HD · 1080p · Русская озвучка';
     }
-      servers.forEach((server, index) => {
-        const btn = document.createElement('button');
-        btn.textContent = server.name;
-        btn.style.cssText = 'background:#1a1a1a;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1);padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;white-space:nowrap;transition:0.2s;';
-        
-        if(index === 0) {
-          btn.style.background = '#c0392b'; // Наш вампирский красный для активной кнопки
-          btn.style.color = '#fff';
-          btn.style.borderColor = '#c0392b';
-          iframe.src = server.url;
-        }
-        
-        btn.onclick = () => {
-          btnContainer.querySelectorAll('button').forEach(b => {
-            b.style.background = '#1a1a1a';
-            b.style.color = 'rgba(255,255,255,0.7)';
-            b.style.borderColor = 'rgba(255,255,255,0.1)';
-          });
-          btn.style.background = '#c0392b';
-          btn.style.color = '#fff';
-          btn.style.borderColor = '#c0392b';
-          iframe.src = server.url;
-        };
-        btnContainer.appendChild(btn);
-      });
 
-      frame.appendChild(btnContainer);
-      frame.appendChild(iframe);
-
-      titleEl.textContent    = `Фильм #${kpId}`;
-      subtitleEl.textContent = 'Оптимизировано под VPN. Если сервер не отвечает, переключите вкладку.';
-    }
     function shareMovie() {
       const btn = document.getElementById('share-btn');
       navigator.clipboard.writeText(window.location.href).then(() => {
